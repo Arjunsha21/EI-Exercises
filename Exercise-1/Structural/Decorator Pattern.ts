@@ -60,3 +60,9 @@ console.log(`${coffee.getDescription()} costs $${coffee.getCost()}`); // Output:
 
 coffee = new SugarDecorator(coffee);
 console.log(`${coffee.getDescription()} costs $${coffee.getCost()}`); // Output: Simple coffee, Milk, Sugar costs $6.5
+
+// created a decorator that adds additional behavior to a coffee-making process.
+// The Coffee interface defines the basic methods getCost and getDescription.
+// The SimpleCoffee class implements the Coffee interface as a simple coffee without any additives.
+// The CoffeeDecorator class implements the Coffee interface and is used as a base class for concrete decorators.
+// The MilkDecorator and SugarDecorator classes extend the CoffeeDecorator class to add additional behavior to the getCost and getDescription methods.

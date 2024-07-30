@@ -37,3 +37,8 @@ paymentProcessor.executePayment(100);
 
 paymentProcessor.setStrategy(new PayPalPayment());
 paymentProcessor.executePayment(200);
+
+// created a payment system where different payment methods can be used interchangeably without altering the client code.
+// The PaymentStrategy interface defines a common interface for all supported algorithms (payment methods).
+// CreditCardPayment and PayPalPayment are concrete implementations of the strategy interface.
+// The PaymentProcessor class is the Context that maintains a reference to the current strategy and allows switching between different strategies

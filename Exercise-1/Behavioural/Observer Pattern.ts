@@ -46,3 +46,7 @@ newsAgency.notify('Breaking News: New TypeScript Version Released!');
 newsAgency.unsubscribe(user1);
 
 newsAgency.notify('Update: TypeScript 5.1 Released!');
+
+//created a simple notification system where subscribers can receive updates from a news agency.
+// The NewsAgency class is the Subject that maintains a list of Observers (subscribers) and notifies them of any updates.
+// The UserSubscriber class implements the Observer interface, receiving updates from the Subject.
