@@ -1,4 +1,8 @@
 // src/factories/TaskFactory.ts
+// Factory Pattern:
+// TaskFactory: This factory class is responsible for creating Task objects. It encapsulates the logic for creating tasks, 
+// including time parsing and validation.
+
 import { Task } from '../models/Task';
 
 export class TaskFactory {

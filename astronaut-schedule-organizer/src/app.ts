@@ -87,3 +87,27 @@ async function main() {
 main().then(() => {
     console.log("Thank you for using the Astronaut Daily Schedule Organizer!");
 });
+
+
+// Usage Instructions
+// Add Task:
+
+// Enter the task description, start time, end time, and priority level. The application will check for conflicts and add the task if there are none.
+// Remove Task:
+
+// Enter the description of the task you wish to remove.
+// View Tasks:
+
+// The application will display a list of tasks sorted by start time.
+// Edit Task:
+
+// Enter the description of the task you wish to edit, followed by the new details.
+// Mark Task as Completed:
+
+// Enter the description of the task you wish to mark as completed.
+// View Tasks by Priority:
+
+// Enter the priority level to view tasks with that level of importance.
+// Exit:
+
+// Close the application.

@@ -1,4 +1,8 @@
 // src/utils/Logger.ts
+// Logging:
+// Logger: A simple logging mechanism writes application events to a log file (application.log). 
+// This can be helpful for debugging and tracking application usage.
+
 import * as fs from 'fs';
 
 export class Logger {

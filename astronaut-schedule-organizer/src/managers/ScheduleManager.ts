@@ -1,4 +1,8 @@
 // src/managers/ScheduleManager.ts
+// Singleton Pattern:
+// ScheduleManager: This class is implemented as a Singleton, ensuring that there is only one
+// instance of the schedule manager handling all tasks throughout the application.
+
 import { Task } from '../models/Task';
 import { TaskFactory } from '../factories/TaskFactory';
 import { Logger } from '../utils/Logger';
