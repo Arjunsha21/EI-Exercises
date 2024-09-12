@@ -1,7 +1,4 @@
 // src/factories/TaskFactory.ts
-// Factory Pattern:
-// TaskFactory: This factory class is responsible for creating Task objects. It encapsulates the logic for creating tasks, 
-// including time parsing and validation.
 
 import { Task } from '../models/Task';
 
@@ -12,25 +9,20 @@ export class TaskFactory {
     endTime: string,
     priority: string
   ): Task | null {
-    const start = TaskFactory.parseTime(startTime);
-    const end = TaskFactory.parseTime(endTime);
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
 
-    if (start && end && start < end) {
-      return new Task(description, start, end, priority);
-    } else {
-      console.log('Error: Invalid time format or end time is before start time.');
+    const startDate = new Date();
+    startDate.setHours(startHours, startMinutes, 0, 0);
+
+    const endDate = new Date();
+    endDate.setHours(endHours, endMinutes, 0, 0);
+
+    if (endDate <= startDate) {
+      console.log('Error: End time must be after start time.');
       return null;
     }
-  }
 
-  private static parseTime(time: string): Date | null {
-    const [hours, minutes] = time.split(':').map(Number);
-    if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
-      const date = new Date();
-      date.setHours(hours, minutes, 0, 0);
-      return date;
-    } else {
-      return null;
-    }
+    return new Task(description, startDate, endDate, priority);
   }
 }

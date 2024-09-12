@@ -13,3 +13,4 @@ export function TaskCompletionObserver(task: Task): void {
   console.log(`Observer: Task "${task.description}" has been completed.`);
 }
 
+

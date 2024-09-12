@@ -3,6 +3,8 @@
 // Logger: A simple logging mechanism writes application events to a log file (application.log). 
 // This can be helpful for debugging and tracking application usage.
 
+// src/utils/Logger.ts
+
 import * as fs from 'fs';
 
 export class Logger {
@@ -22,4 +24,5 @@ export class Logger {
     fs.appendFileSync(this.logFile, logMessage);
   }
 }
+
 

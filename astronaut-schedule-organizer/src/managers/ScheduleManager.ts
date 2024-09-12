@@ -3,14 +3,21 @@
 // ScheduleManager: This class is implemented as a Singleton, ensuring that there is only one
 // instance of the schedule manager handling all tasks throughout the application.
 
+// src/managers/ScheduleManager.ts
+
+// src/managers/ScheduleManager.ts
+
+import * as fs from 'fs';
 import { Task } from '../models/Task';
 import { TaskFactory } from '../factories/TaskFactory';
 import { Logger } from '../utils/Logger';
+import { TimeValidator } from '../utils/TimeValidator';
 
 export class ScheduleManager {
   private static instance: ScheduleManager;
   private tasks: Task[] = [];
   private observers: Array<(task: Task) => void> = [];
+  private notificationInterval: NodeJS.Timeout | null = null;
 
   private constructor() {}
 
@@ -36,6 +43,28 @@ export class ScheduleManager {
         console.log('Task added successfully. No conflicts.');
         Logger.info(`Task added: ${task.toString()}`);
       }
+    }
+  }
+
+  public importTasksFromFile(filename: string): void {
+    try {
+      const data = fs.readFileSync(filename, 'utf-8');
+      const lines = data.split('\n').filter(line => line.trim() !== '');
+
+      lines.forEach((line, index) => {
+        const [description, startTime, endTime, priority] = line.split(',').map(item => item.trim());
+
+        if (!TimeValidator.isValidTime(startTime) || !TimeValidator.isValidTime(endTime)) {
+          console.log(`Error: Invalid time format on line ${index + 1}. Task skipped.`);
+          return;
+        }
+
+        this.addTask(description, startTime, endTime, priority);
+      });
+
+      console.log('Tasks imported successfully.');
+    } catch (error) {
+      console.error('Error importing tasks from file:', error);
     }
   }
 
@@ -104,13 +133,29 @@ export class ScheduleManager {
   }
 
   public viewTasksByPriority(priority: string): void {
-    const filteredTasks = this.tasks.filter(
-      (task) => task.priority.toLowerCase() === priority.toLowerCase()
-    );
+    const normalizedPriority = priority.trim().toLowerCase();
+
+    const filteredTasks = this.tasks.filter(task => {
+      return task.priority.toLowerCase() === normalizedPriority;
+    });
+
     if (filteredTasks.length === 0) {
-      console.log(`No tasks found for priority level: ${priority}`);
+      console.log(`No tasks found with priority: ${priority}`);
     } else {
-      filteredTasks.forEach((task) => console.log(task.toString()));
+      console.log(`Tasks with priority ${priority}:`);
+      filteredTasks.forEach(task => {
+        console.log(`- ${task.description} from ${task.startTime.toLocaleTimeString()} to ${task.endTime.toLocaleTimeString()}`);
+      });
+    }
+  }
+
+  public exportTasksToFile(filename: string): void {
+    try {
+      const data = this.tasks.map(task => task.toString()).join('\n');
+      fs.writeFileSync(filename, data);
+      console.log('Tasks exported successfully.');
+    } catch (error) {
+      console.error('Error exporting tasks to file:', error);
     }
   }
 
@@ -141,4 +186,39 @@ export class ScheduleManager {
     const completionMessage = `Task "${task.description}" [${task.priority}] completed at ${new Date().toLocaleTimeString()}.`;
     console.log(completionMessage);
   }
+
+  // Start checking for notifications
+  public startNotifications(): void {
+    this.notificationInterval = setInterval(() => {
+      this.tasks.forEach(task => {
+        const now = new Date();
+        if (!task.completed && task.startTime <= now && task.endTime >= now) {
+          console.log(`Notification: Task "${task.description}" is ongoing.`);
+        }
+      });
+    }, 60000); // Check every minute
+  }
+
+  // Stop notifications
+  public stopNotifications(): void {
+    if (this.notificationInterval) {
+      clearInterval(this.notificationInterval);
+      this.notificationInterval = null;
+    }
+  }
 }
+
+
+  // private checkForDueTasks(): void {
+  //   const now = new Date();
+  //   this.tasks.forEach(task => {
+  //     if (task.startTime <= now && !task.completed) {
+  //       console.log(`Notification: Task "${task.description}" is due now.`);
+  //       Logger.info(`Notification: Task "${task.description}" is due now.`);
+  //     }
+  //   });
+  // }
+
+  // public startNotificationTimer(interval: number = 60000): void {
+  //   setInterval(() => this.checkForDueTasks(), interval);
+  // }
